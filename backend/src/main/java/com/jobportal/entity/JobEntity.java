@@ -3,6 +3,8 @@ package com.jobportal.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -19,7 +21,15 @@ public class JobEntity {
     private String email;
     @Column(nullable = false)
     private String password;
+     @Enumerated(EnumType.STRING)
+     @Column(nullable = false)
+    private Role role;
 
+    private String resumeUrl;
+
+    private String skills;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
 
 
 }

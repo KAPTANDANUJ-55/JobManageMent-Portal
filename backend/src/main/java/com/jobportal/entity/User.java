@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JobEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +28,11 @@ public class JobEntity {
     private String resumeUrl;
 
     private String skills;
+
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 

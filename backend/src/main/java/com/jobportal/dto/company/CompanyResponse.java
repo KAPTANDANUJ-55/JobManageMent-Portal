@@ -10,6 +10,7 @@ import lombok.Setter;
 public class CompanyResponse {
     private Long id;
     private String name;
+    private String companyEmail;
     private String description;
     private String location;
     private String website;

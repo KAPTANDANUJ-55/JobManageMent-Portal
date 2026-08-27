@@ -26,6 +26,8 @@ public class Company {
 
     private String website;
 
+    private String companyEmail;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruiter_id", nullable = false)
     private User recruiter;

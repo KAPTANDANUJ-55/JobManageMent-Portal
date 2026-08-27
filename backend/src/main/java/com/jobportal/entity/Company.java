@@ -17,7 +17,7 @@ public class Company {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String Companyname;
 
     @Column(columnDefinition = "TEXT")
     private String description;

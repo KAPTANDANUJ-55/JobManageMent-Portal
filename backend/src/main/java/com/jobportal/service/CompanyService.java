@@ -2,13 +2,16 @@ package com.jobportal.service;
 
 import com.jobportal.dto.company.CompanyRequest;
 import com.jobportal.dto.company.CompanyResponse;
+import com.jobportal.dto.job.JobResponse;
 import com.jobportal.entity.Company;
 import com.jobportal.entity.User;
 import com.jobportal.repository.CompanyRepo;
 import com.jobportal.repository.UserRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
@@ -28,7 +31,7 @@ public class CompanyService {
         User recruiter = userRepo.findById(recruiterId)
                 .orElseThrow(() -> new RuntimeException("Recruiter not found with ID: " + recruiterId));
 
-         Company company = Company.builder().Companyname(request.getName()).companyEmail(request.getCompanyEmail()).recruiter(recruiter).website(request.getWebsite()).location(request.getLocation()).description(request.getDescription()).id(request.getCompanyId()).build();
+         Company company = Company.builder().Companyname(request.getName()).companyEmail(request.getCompanyEmail()).recruiter(recruiter).website(request.getWebsite()).location(request.getLocation()).description(request.getDescription()).companyid(request.getCompanyId()).build();
          
 
         Company savedCompany = companyRepo.save(company);
@@ -53,12 +56,23 @@ public class CompanyService {
 
  }
 
+ public List<CompanyResponse> findAllCompanies() {
+        return companyRepo.findAllByCompanyid().stream().map(this::mapToResponse).collect(Collectors.toList());
+ }
+ public  CompanyResponse getCompanyById(Long companyId) {
+        Company company = companyRepo.findById(companyId).orElseThrow(() -> new RuntimeException("Company with ID: " + companyId + " not found!"));
+
+        return mapToResponse(company);
+ }
+
  public CompanyResponse deleteCompany(Long companyId,Long recruiterId) {
         Company company = companyRepo.findById(companyId).orElseThrow(() -> new RuntimeException("Company with ID: " + companyId + " not found!"));
      if (!company.getRecruiter().getId().equals(recruiterId)) {
          throw new RuntimeException("Unauthorized: You cannot delete this company profile");
      }
         companyRepo.delete(company);
+
+     return mapToResponse(company);
  }
     private CompanyResponse mapToResponse(Company company) {
         return CompanyResponse.builder()
@@ -70,5 +84,13 @@ public class CompanyService {
                 .recruiterId(company.getRecruiter().getId())
                 .recruiterName(company.getRecruiter().getFullName())
                 .build();
+    }
+
+    private List<CompanyResponse> getBySkills(String skills) {
+        List<Company> company = companyRepo.findCompaniesByRequiredSkill(skills);
+        if (skills == null || skills.trim().isEmpty() || !company.equals(skills)) {
+            throw new RuntimeException("Skill keyword cannot be empty");
+        }
+        return company.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 }

@@ -13,6 +13,7 @@ public class CompanyResponse {
     private String companyEmail;
     private String description;
     private String location;
+    private String skills;
     private String website;
     private Long recruiterId;
     private String recruiterName;

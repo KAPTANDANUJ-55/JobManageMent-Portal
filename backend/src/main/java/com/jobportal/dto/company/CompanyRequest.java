@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CompanyRequest {
-
+    private Long companyId;
     @NotBlank(message = "Company name is required")
     private String name;
     @Column(unique = true)
@@ -16,4 +16,5 @@ public class CompanyRequest {
     private String description;
     private String location;
     private String website;
+    private String recruiterName;
 }

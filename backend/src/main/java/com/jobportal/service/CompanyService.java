@@ -57,7 +57,7 @@ public class CompanyService {
  }
 
  public List<CompanyResponse> findAllCompanies() {
-        return companyRepo.findAllByCompanyid().stream().map(this::mapToResponse).collect(Collectors.toList());
+        return companyRepo.findAll().stream().map(this::mapToResponse).collect(Collectors.toList());
  }
  public  CompanyResponse getCompanyById(Long companyId) {
         Company company = companyRepo.findById(companyId).orElseThrow(() -> new RuntimeException("Company with ID: " + companyId + " not found!"));

@@ -13,8 +13,7 @@ public interface CompanyRepo extends JpaRepository<Company,Long> {
     Optional<Company> findByCompanyname(String companyname);
     boolean existsByCompanyname(String companyname);
 
-    List<Company> findlByRecruiterId(Long recruiterId);
-    List<Company> findAllByCompanyid();
+    List<Company> findByRecruiterId(Long recruiterId);
     @Query("SELECT DISTINCT j.company FROM Job j WHERE LOWER(j.requiredSkills) LIKE LOWER(CONCAT('%', :skill, '%')) AND j.active = true")
     List<Company> findCompaniesByRequiredSkill(@Param("skill") String skills);
 

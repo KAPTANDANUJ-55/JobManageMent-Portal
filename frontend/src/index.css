@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  * {
+    @apply border-ink-200;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink-50 text-ink-800 font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-ink-900 font-semibold tracking-tight;
+  }
+
+  /* A single, consistent focus ring everywhere instead of the browser default. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-white;
+  }
+
+  /* Respect users who ask the OS to reduce motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Thin, unobtrusive scrollbars for scrollable panels. */
+  .scrollbar-slim::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-slim::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-ink-300;
+  }
+  .scrollbar-slim::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  /* Skip link: visible only when focused via keyboard. */
+  .skip-link {
+    @apply absolute left-4 -top-20 z-[100] rounded-lg bg-primary-600 px-4 py-2
+      text-sm font-semibold text-white transition-all focus:top-4;
+  }
+}
+
+@layer utilities {
+  /* Loading placeholder sweep used by the Skeleton component. */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0) 0%,
+      rgb(255 255 255 / 0.6) 50%,
+      rgb(255 255 255 / 0) 100%
+    );
+    animation: shimmer 1.6s infinite;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

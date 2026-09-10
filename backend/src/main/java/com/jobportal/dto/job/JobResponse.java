@@ -25,4 +25,8 @@ public class JobResponse {
     private String companyName;
     private Long postedById;
     private String postedByName;
+
+
+    private String recruiterName;
+    private Long recruiterId;
 }

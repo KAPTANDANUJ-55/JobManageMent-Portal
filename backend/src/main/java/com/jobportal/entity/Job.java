@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "companies")
+@Table(name = "jobs")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -40,6 +40,9 @@ public class Job {
     private User postedBy;
     private boolean Active = true;
     private LocalDateTime postedAt = LocalDateTime.now();
+
+    private String recruiterName;
+    private Long recruiterId;
 
 }
 

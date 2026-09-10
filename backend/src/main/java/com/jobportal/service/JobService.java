@@ -2,6 +2,7 @@ package com.jobportal.service;
 
 import com.jobportal.dto.job.JobRequest;
 import com.jobportal.dto.job.JobResponse;
+import com.jobportal.entity.Company;
 import com.jobportal.entity.Job;
 import com.jobportal.entity.Recruiter;
 import com.jobportal.entity.User;
@@ -11,6 +12,7 @@ import com.jobportal.repository.RecruiterRepo;
 import com.jobportal.repository.UserRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -28,7 +30,27 @@ public class JobService {
 
     public JobResponse postJob(JobRequest jobRequest, Long recruiterId) {
         Recruiter recruiter = recruiterRepo.findById(recruiterId).orElseThrow(() -> new RuntimeException("Company with ID: " + recruiterId + " not found!"));
-          return null
+        Company company = companyRepo.findById(jobRequest.getCompanyId()).orElseThrow(() -> new RuntimeException("Company with ID: " + jobRequest.getCompanyId() + " not found!"));
+        if (!company.getRecruiter().getId().equals(recruiterId)) {
+            throw new RuntimeException("Unauthorized: You do not own this company profile");
+        }
+
+        Job job = Job.builder()
+                .title(jobRequest.getTitle())
+                .description(jobRequest.getDescription())
+                .location(jobRequest.getLocation())
+                .jobType(jobRequest.getJobType())
+                .salaryMin(jobRequest.getSalaryMin())
+                .salaryMax(jobRequest.getSalaryMax())
+                .requiredSkills(jobRequest.getRequiredSkills())
+                .company(company)
+                .recruiterId(recruiter.getId())
+                .recruiterName(recruiter.getFullName())
+                .postedAt(LocalDateTime.now())
+                .build();
+
+        Job savedJob = jobRepo.save(job);
+        return mapToResponse(savedJob);
     }
 
     private JobResponse mapToResponse(Job job) {

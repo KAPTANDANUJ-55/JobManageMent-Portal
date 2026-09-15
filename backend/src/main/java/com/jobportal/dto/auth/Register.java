@@ -1,4 +1,5 @@
 package com.jobportal.dto.auth;
+import com.jobportal.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -7,4 +8,5 @@ import lombok.Setter;
         private String username;
         private String password;
         private String email;
+        private Role role;
     }

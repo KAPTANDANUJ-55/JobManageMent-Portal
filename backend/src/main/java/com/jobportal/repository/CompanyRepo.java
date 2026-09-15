@@ -14,7 +14,7 @@ public interface CompanyRepo extends JpaRepository<Company,Long> {
     boolean existsByCompanyname(String companyname);
 
     List<Company> findByRecruiterId(Long recruiterId);
-    @Query("SELECT DISTINCT j.company FROM Job j WHERE LOWER(j.requiredSkills) LIKE LOWER(CONCAT('%', :skill, '%')) AND j.active = true")
+    @Query("SELECT DISTINCT j.company FROM Job j WHERE LOWER(j.requiredSkills) LIKE LOWER(CONCAT('%', :skill, '%')) AND j.Active = true")
     List<Company> findCompaniesByRequiredSkill(@Param("skill") String skills);
 
 }

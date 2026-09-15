@@ -37,12 +37,15 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(name = "posted_by_id")
-    private User postedBy;
+    private Recruiter postedBy;
     private boolean Active = true;
     private LocalDateTime postedAt = LocalDateTime.now();
 
     private String recruiterName;
     private Long recruiterId;
+    @ManyToOne
+    @JoinColumn(name = "company_id_companyid")
+    private Company companyId;
 
 }
 

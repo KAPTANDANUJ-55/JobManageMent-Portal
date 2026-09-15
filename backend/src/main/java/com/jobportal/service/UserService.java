@@ -2,6 +2,7 @@ package com.jobportal.service;
 
 import com.jobportal.dto.auth.Login;
 import com.jobportal.dto.auth.Register;
+import com.jobportal.entity.Role;
 import com.jobportal.entity.User;
 import com.jobportal.repository.UserRepo;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 @Service
@@ -24,13 +26,19 @@ public class UserService {
     }
 
 
+    public ResponseEntity<?> getAllUsers(){
+        List<User> user = userRepo.findAll();
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
     public ResponseEntity<?> registerUser(Register register) {
         Optional<User> findByEmail = userRepo.findByEmail(register.getEmail());
         if (findByEmail.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The User With This Email already exists");
         }
        String encodedPassword = passwordEncoder.encode(register.getPassword());
-            User user = User.builder().password(encodedPassword).fullName(register.getUsername()).email(register.getEmail()).build();
+            User user = User.builder().password(encodedPassword).role(register.getRole() !=null ? register.getRole(): Role.JOB_SEEKER).fullName(register.getUsername()).email(register.getEmail()).build();
 
 
         userRepo.save(user);

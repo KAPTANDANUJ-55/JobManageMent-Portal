@@ -53,6 +53,45 @@ public class JobService {
         return mapToResponse(savedJob);
     }
 
+    public JobResponse updateJob(Long jobId,JobRequest jobRequest, Long recruiterId) {
+        Job job = jobRepo.findByid(jobId).orElseThrow(() -> new RuntimeException("Job with ID: " + jobId + " not found!"));
+
+        job.setTitle(jobRequest.getTitle());
+        job.setDescription(jobRequest.getDescription());
+        job.setLocation(jobRequest.getLocation());
+        job.setJobType(jobRequest.getJobType());
+        job.setSalaryMin(jobRequest.getSalaryMin());
+        job.setSalaryMax(jobRequest.getSalaryMax());
+        job.setRecruiterId(recruiterId);
+        job.setRequiredSkills(jobRequest.getRequiredSkills());
+        jobRepo.save(job);
+        return mapToResponse(job);
+
+    }
+
+
+    public JobResponse toggleJob(Long jobId, Long recruiterId) {
+        Job job = jobRepo.findByid(jobId).orElseThrow(() -> new RuntimeException("Job with ID: " + jobId + " not found!"));
+
+        if(!job.getPostedBy().getId().equals(recruiterId)) {
+            throw new RuntimeException("Unauthorized: You do not own this company profile");
+        }
+        job.setActive(!job.isActive());
+        jobRepo.save(job);
+
+        return mapToResponse(job);
+    }
+
+    public JobResponse deleteJob(Long jobId, Long recruiterId) {
+        Job job = jobRepo.findByid(jobId).orElseThrow(() -> new RuntimeException("Job with ID: " + jobId + " not found!"));
+
+        if(!job.getPostedBy().getId().equals(recruiterId)) {
+            throw new RuntimeException("Unauthorized: You do not own this company profile");
+        }
+
+        jobRepo.delete(job);
+        return mapToResponse(job);
+    }
     private JobResponse mapToResponse(Job job) {
         return JobResponse.builder()
                 .id(job.getId())
@@ -62,7 +101,7 @@ public class JobService {
                 .salaryMin(job.getSalaryMin())
                 .requiredSkills(job.getRequiredSkills())
                 .active(job.isActive())
-                .companyId(job.getCompany().getCompanyid())
+                .companyId(job.getCompany().getId())
                 .companyName(job.getCompany().getCompanyname())
                 .salaryMax(job.getSalaryMax()).recruiterId(job.getRecruiterId())
                 .recruiterName(job.getRecruiterName())

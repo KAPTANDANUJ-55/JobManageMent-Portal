@@ -100,29 +100,29 @@ export default function LoginPage() {
           </div>
           <div className="grid grid-cols-3 gap-2">
             <Button
-              variant="white"
+              variant="outline"
               size="sm"
               isLoading={quickLoading === ROLES.SEEKER}
               onClick={() => handleQuickLogin(ROLES.SEEKER)}
-              className="text-xs py-2 bg-white dark:bg-ink-900 border-primary-200/80 dark:border-primary-900"
+              className="text-xs py-2 bg-white dark:bg-ink-900 border-primary-200 dark:border-primary-800 text-ink-900 dark:text-ink-100 hover:bg-primary-50 dark:hover:bg-primary-950/60 font-semibold shadow-sm"
             >
               Job Seeker
             </Button>
             <Button
-              variant="white"
+              variant="outline"
               size="sm"
               isLoading={quickLoading === ROLES.RECRUITER}
               onClick={() => handleQuickLogin(ROLES.RECRUITER)}
-              className="text-xs py-2 bg-white dark:bg-ink-900 border-primary-200/80 dark:border-primary-900"
+              className="text-xs py-2 bg-white dark:bg-ink-900 border-primary-200 dark:border-primary-800 text-ink-900 dark:text-ink-100 hover:bg-primary-50 dark:hover:bg-primary-950/60 font-semibold shadow-sm"
             >
               Recruiter
             </Button>
             <Button
-              variant="white"
+              variant="outline"
               size="sm"
               isLoading={quickLoading === ROLES.ADMIN}
               onClick={() => handleQuickLogin(ROLES.ADMIN)}
-              className="text-xs py-2 bg-white dark:bg-ink-900 border-primary-200/80 dark:border-primary-900"
+              className="text-xs py-2 bg-white dark:bg-ink-900 border-primary-200 dark:border-primary-800 text-ink-900 dark:text-ink-100 hover:bg-primary-50 dark:hover:bg-primary-950/60 font-semibold shadow-sm"
             >
               Admin
             </Button>

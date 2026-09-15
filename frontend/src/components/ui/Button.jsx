@@ -8,7 +8,7 @@ const variants = {
   secondary:
     'bg-ink-100 dark:bg-ink-800 text-ink-800 dark:text-ink-100 hover:bg-ink-200 dark:hover:bg-ink-700 focus-visible:ring-ink-400',
   outline:
-    'border border-ink-300 dark:border-ink-700 text-ink-700 dark:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-800 focus-visible:ring-primary-500',
+    'border border-ink-300 dark:border-ink-700 bg-transparent text-ink-800 dark:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-800 hover:text-ink-900 dark:hover:text-white focus-visible:ring-primary-500',
   ghost:
     'text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 hover:text-ink-900 dark:hover:text-white',
   danger:
@@ -16,7 +16,7 @@ const variants = {
   success:
     'bg-success-600 text-white hover:bg-success-700 active:bg-success-800 shadow-sm focus-visible:ring-success-500',
   white:
-    'bg-white text-ink-900 hover:bg-ink-50 shadow-sm border border-ink-200 focus-visible:ring-primary-500',
+    'bg-white dark:bg-ink-800 text-ink-900 dark:text-ink-100 hover:bg-ink-50 dark:hover:bg-ink-700 shadow-sm border border-ink-200 dark:border-ink-700 focus-visible:ring-primary-500',
 };
 
 const sizes = {

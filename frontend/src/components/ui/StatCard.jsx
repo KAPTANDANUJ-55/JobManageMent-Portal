@@ -18,9 +18,12 @@ export default function StatCard({
   changeType = 'increase',
   icon: Icon,
   description,
+  changeLabel,
   color = 'primary',
   className = '',
 }) {
+  const finalDescription = description || changeLabel;
+
   return (
     <Card className={cn('relative overflow-hidden', className)} padding="md">
       <div className="flex items-start justify-between">
@@ -39,12 +42,12 @@ export default function StatCard({
               iconColors[color] || iconColors.primary
             )}
           >
-            <Icon className="w-6 h-6" />
+            {React.isValidElement(Icon) ? Icon : <Icon className="w-6 h-6" />}
           </div>
         )}
       </div>
 
-      {(change || description) && (
+      {(change || finalDescription) && (
         <div className="mt-4 flex items-center gap-2 text-xs font-medium">
           {change && (
             <span
@@ -65,8 +68,8 @@ export default function StatCard({
               {change}
             </span>
           )}
-          {description && (
-            <span className="text-ink-500 dark:text-ink-400 truncate">{description}</span>
+          {finalDescription && (
+            <span className="text-ink-500 dark:text-ink-400 truncate">{finalDescription}</span>
           )}
         </div>
       )}

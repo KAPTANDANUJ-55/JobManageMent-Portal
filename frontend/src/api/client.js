@@ -1,13 +1,13 @@
 // ---------------------------------------------------------------------------
 // Universal API Client
 // Handles both Mock mode (in-browser DB) and Live mode (Spring Boot backend)
-// Controlled by `VITE_USE_MOCKS=true` in .env
+// Controlled by `VITE_USE_MOCKS=false` in .env
 // ---------------------------------------------------------------------------
 import axios from 'axios';
-import { TOKEN_KEY } from '@/utils/constants';
+import { TOKEN_KEY, USER_KEY } from '@/utils/constants';
 import * as mockHandlers from './mock/handlers';
 
-const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false';
+const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === 'true';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Live Axios client for Spring Boot
@@ -35,6 +35,11 @@ liveClient.interceptors.request.use(
 liveClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    if (error.response?.status === 401) {
+      // Clear invalid credentials
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+    }
     const message =
       error.response?.data?.message ||
       error.response?.data?.error ||

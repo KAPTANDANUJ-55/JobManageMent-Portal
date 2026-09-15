@@ -102,12 +102,14 @@ export default function ApplyModal({
 
   if (!job) return null;
 
-  return (
+    const companyDisplay = job.companyName || job.company?.name || 'Company';
+
+    return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
       title={submitted ? '' : `Apply for ${job.title}`}
-      description={submitted ? '' : `${job.companyName} • ${job.location} • ${job.workMode || job.type}`}
+      description={submitted ? '' : `${companyDisplay} • ${job.location} • ${job.workMode || job.type || job.jobType || 'Full-time'}`}
       size="lg"
     >
       {submitted ? (
@@ -120,7 +122,7 @@ export default function ApplyModal({
               Application Sent Successfully!
             </h3>
             <p className="text-sm text-ink-600 dark:text-ink-300 max-w-md mx-auto">
-              The recruitment team at <span className="font-semibold">{job.companyName}</span> has received your application. You can monitor its status from your dashboard.
+              The recruitment team at <span className="font-semibold">{companyDisplay}</span> has received your application. You can monitor its status from your dashboard.
             </p>
           </div>
           <div className="pt-4 flex justify-center gap-3">

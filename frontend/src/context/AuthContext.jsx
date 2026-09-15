@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { authApi } from '@/api';
+import { USE_MOCKS } from '@/api/client';
 import { TOKEN_KEY, USER_KEY, ROLES, ROLE_HOME } from '@/utils/constants';
 import { DEMO_PASSWORD } from '@/api/mock/db';
 
@@ -17,6 +18,16 @@ export function AuthProvider({ children }) {
         const storedToken = localStorage.getItem(TOKEN_KEY);
         const storedUser = localStorage.getItem(USER_KEY);
         if (storedToken && storedUser) {
+          // If in live mode and the token is a mock token, clear it to prevent 401/403
+          if (!USE_MOCKS && storedToken.startsWith('mock-jwt-token')) {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            setToken(null);
+            setUser(null);
+            setIsLoading(false);
+            return;
+          }
+
           setToken(storedToken);
           setUser(JSON.parse(storedUser));
           // Verify with getMe
@@ -25,9 +36,20 @@ export function AuthProvider({ children }) {
             if (freshUser) {
               setUser(freshUser);
               localStorage.setItem(USER_KEY, JSON.stringify(freshUser));
+            } else {
+              localStorage.removeItem(TOKEN_KEY);
+              localStorage.removeItem(USER_KEY);
+              setToken(null);
+              setUser(null);
             }
           } catch (e) {
             console.warn('Silent token check failed:', e);
+            if (!USE_MOCKS) {
+              localStorage.removeItem(TOKEN_KEY);
+              localStorage.removeItem(USER_KEY);
+              setToken(null);
+              setUser(null);
+            }
           }
         }
       } catch (err) {
@@ -45,6 +67,8 @@ export function AuthProvider({ children }) {
       const res = await authApi.login({ email, password });
       setToken(res.token);
       setUser(res.user);
+      localStorage.setItem(TOKEN_KEY, res.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
       return res.user;
     } finally {
       setIsLoading(false);
@@ -57,6 +81,8 @@ export function AuthProvider({ children }) {
       const res = await authApi.register(userData);
       setToken(res.token);
       setUser(res.user);
+      localStorage.setItem(TOKEN_KEY, res.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
       return res.user;
     } finally {
       setIsLoading(false);
@@ -75,6 +101,7 @@ export function AuthProvider({ children }) {
       if (!user) return null;
       const updated = await authApi.updateProfile(user.id, updates);
       setUser(updated);
+      localStorage.setItem(USER_KEY, JSON.stringify(updated));
       return updated;
     },
     [user]
@@ -82,7 +109,8 @@ export function AuthProvider({ children }) {
 
   const quickLoginAs = useCallback(
     async (role) => {
-      let email = 'arsh@demo.com';
+      let email = 'seeker@demo.com';
+      if (role === ROLES.SEEKER || role === 'JOB_SEEKER') email = 'seeker@demo.com';
       if (role === ROLES.RECRUITER) email = 'recruiter@demo.com';
       if (role === ROLES.ADMIN) email = 'admin@demo.com';
 
